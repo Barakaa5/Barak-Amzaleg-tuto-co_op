@@ -1,0 +1,51 @@
+<% include partials/header %>
+
+
+
+		<div class="container">
+			<div class="forcast">
+
+				<div class="row justify-content-start">
+					<div class="col-3 box" id="home">
+						<h4 >Home</h4>
+					</div>
+					<div class="col-3 box">
+						<h4>Favorites</h4>
+					</div>
+				</div>
+
+				<div class="row city">
+					<div class="col-3">
+						<h4>Choose a city:</h4>
+					</div>
+					<div class="col-6">
+						<input type="text" name="cityName" value="<%= city %>" placeholder="<%= error %>">
+					</div>
+					<div class="col-3">
+						<i class="far fa-heart fa-2x"></i>
+					</div>
+				</div>
+
+				<div class="row form justify-content-end">
+					<form action="/" method="POST" name="myForm" class="col-4">
+						<input type="hidden" name="hiddenInput" value="">
+						<button class="box" onclick="copyCity()">Play!</button>
+					</form>
+				</div>
+
+			</div>
+			
+		</div>
+
+
+		<Script>
+		/* function */
+		function copyCity(){
+			let cityName = document.getElementsByName("cityName")[0].value;
+			document.getElementsByName("hiddenInput")[0].value = cityName;
+			document.getElementsByName("myForm").action = "/" + cityName;
+		}
+		</Script>
+	
+
+<% include partials/footer %>
