@@ -2,67 +2,83 @@
 
 
 
-		<div class="container">
-			<div class="forcast">
+	<div class="container">
+		<div class="forcast">
 
-				<div class="row justify-content-start">
-					<div class="col-3 box" id="home">
-						<h4 >Home</h4>
-					</div>
-					<div class="col-3 box">
-						<h4>Favorites</h4>
-					</div>
+			<div class="row justify-content-start tab">
+				<div class="col-3 box hover" id="home">
+					<a href="/">Home</a>
 				</div>
-
-				<div class="row city">
-					<div class="col-3">
-						<h4>Choose a city:</h4>
-					</div>
-					<div class="col-6">
-						<input type="text" name="cityName" value="<%= city%>">
-					</div>
-					<div class="col-3">
-						<h4>FAVORITE</h4>
-					</div>
+				<div class="col-3 box hover">
+					<a href="/favorites">Favorites</a>
 				</div>
+			</div>
 
-				<div class="row weather justify-content-around">
-					<% dayData.forEach(day => {%>
+			<div class="row city">
+				<div class="col-3">
+					<span class="align-middle">Choose a city:</span>
+				</div>
+				<div class="col-6">
+					<input type="text" name="cityName" value="<%= city%>">
+				</div>
+				<div class="col-3">
+					<form action="/favorites" method="POST" name="" class="col-4">
+						<input type="hidden" name="hiddenInput2" value="">
+						<button class="box hover addFav" onclick="addFav()"><i class="far fa-heart fa-2x"></i> </button>
+					</form>
+				</div>
+			</div>
+
+			<div class="row weather justify-content-around">
+				<% dayData.forEach(day=> {%>
 					<div class="col-2 box">
 						<div class="row">
 							<div class="col-12">
-								<h4><%=day[0]%></h4>
+								<h4>
+									<%=day[0]%>
+								</h4>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<h4><%=day[1]%>ºC</h4>
+								<h4>
+									<%=day[1]%>ºC
+								</h4>
 							</div>
 						</div>
 					</div>
 					<%}); %>
-				</div>
-
-				<div class="row form justify-content-end">
-					<form action="/" method="POST" name="myForm" class="col-4">
-						<input type="hidden" name="hiddenInput" value="">
-						<button class="box" onclick="copyCity()">Play!</button>
-					</form>
-				</div>
-
 			</div>
-			
+
+			<div class="row form justify-content-end">
+				<form action="/" method="POST" name="myForm" class="col-4 ">
+					<input type="hidden" name="hiddenInput" value="">
+					<button class="box hover" onclick="copyCity()">Play!</button>
+				</form>
+			</div>
+
 		</div>
 
+	</div>
 
-		<Script>
+
+	<Script>
 		/* function */
-		function copyCity(){
+
+		function addFav(){
+			let cityName = document.getElementsByName("cityName")[0].value;
+			document.getElementsByName("hiddenInput2")[0].value = cityName;
+			
+		}
+
+		function copyCity() {
 			let cityName = document.getElementsByName("cityName")[0].value;
 			document.getElementsByName("hiddenInput")[0].value = cityName;
 			document.getElementsByName("myForm").action = "/" + cityName;
 		}
-		</Script>
-	
 
-<% include partials/footer %>
+
+	</Script>
+
+
+	<% include partials/footer %>

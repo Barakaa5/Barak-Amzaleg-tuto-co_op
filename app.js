@@ -1,7 +1,13 @@
-var express = require("express"),
+let express = require("express"),
 	app = express(),
 	bodyParser = require('body-parser'),
 	request = require('request');
+//Favorites = require('./views/Favorites.js');
+
+
+//console.log(Favorites.favorites[0].city);
+/*Favorites.favorites.push({"city":"test"})
+console.log(Favorites);*/
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -9,10 +15,83 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
 
+let favorites = [{ "city": "tel aviv", key: "215854" }, { "city": "new york", key: "" }, { "city": "haifa", key: "" }];
+console.log(favorites)
+
+
+
 app.get("/", function (req, res) {
 	res.render("landing", { city: req.params.cityName, error: "" });
 });
 
+app.get("/favorites", function (req, res) {
+	let temperatures = [];
+
+	favorites.forEach(fav => {
+		request(
+			'http://dataservice.accuweather.com/currentconditions/v1/' + fav.key + '?apikey=LGXJTWuOUcsc1Zt5Gj24dQV8aiPe42DO',
+			function (error, response, body) {
+				//console.log("1 response:" + response.statusCode);
+				if (response.statusCode != 200) {
+					console.log('---------------------------------------------------');
+					console.log('There is an error and this is what happend:');
+					console.log('---------------------------------------------------');
+					console.log(response);
+					res.redirect("/");
+				} else {
+					if (response.statusCode == 200) {
+						let parsedData1 = JSON.parse(body);
+						if (parsedData1.length == 0) {
+							return res.render("landing", { city: "", favorites: favorites, error: "ERROR! Search for a legal city again" });
+						} else {
+							temperatures.push(Temperature.Metric.Value);
+							res.render("favorites", { favorites: favorites, temperatures: temperatures });
+						}
+					}
+				}
+			}
+		)
+	});
+
+
+	/*let cityKey = parsedData1[0].Key;
+								console.log("before change fav:")
+								console.log(favorites)
+								favorites.push({ "city": cityName, "key": cityKey });
+								console.log("new fav:")
+								console.log(favorites)
+								res.render("favorites", { favorites: favorites });*/
+});
+
+
+app.post('/favorites', function (req, res) {
+	let cityName = req.body.hiddenInput2;
+
+	request(
+		'http://dataservice.accuweather.com/locations/v1/cities/search?apikey=LGXJTWuOUcsc1Zt5Gj24dQV8aiPe42DO&q=' + cityName,
+		function (error, response, body) {
+			//console.log("1 response:" + response.statusCode);
+			if (response.statusCode != 200) {
+				console.log('---------------------------------------------------');
+				console.log('There is an error and this is what happend:');
+				console.log('---------------------------------------------------');
+				console.log(response);
+				res.redirect("/");
+			} else {
+				if (response.statusCode == 200) {
+					let parsedData1 = JSON.parse(body);
+					if (parsedData1.length == 0) {
+						return res.render("landing", { city: "", favorites: favorites, error: "ERROR! Search for a legal city again" });
+					} else {
+						let cityKey = parsedData1[0].Key;
+						favorites.push({ "city": "cityName", "key": cityKey })
+						res.redirect("/favorites");
+					}
+				}
+			}
+		}
+	)
+});
 
 app.post('/', function (req, res) {
 
@@ -32,7 +111,7 @@ app.post('/', function (req, res) {
 				if (response.statusCode == 200) {
 					let parsedData1 = JSON.parse(body);
 					if (parsedData1.length == 0) {
-						return res.render("landing", { city: "", error: "ERROR! Search for a legal city again" });
+						return res.render("landing", { city: "", favorites: favorites, error: "ERROR! Search for a legal city again" });
 					}
 					let cityKey = parsedData1[0].Key;
 
@@ -69,7 +148,7 @@ app.post('/', function (req, res) {
 									let day5 = [day5Name, day5Forcast];
 
 									let dayData = [day1, day2, day3, day4, day5];
-									res.render("forcast", { city: cityName, dayData: dayData });
+									res.render("forcast", { city: cityName, favorites: favorites, dayData: dayData });
 								}
 							}
 						}

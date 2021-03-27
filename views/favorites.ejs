@@ -1,0 +1,49 @@
+<% include partials/header %>
+
+
+
+		<div class="container">
+			<div class="forcast">
+
+				<div class="row justify-content-start tab">
+					<div class="col-3 box hover" >
+						<a href="/">Home</a>
+					</div>
+					<div class="col-3 box hover" id="home">
+						<a href="/favorites">Favorites</a>
+					</div>
+				</div>
+
+				<div class="row weather justify-content-center">
+					<% favorites.forEach(fav,index) {%>
+					<div class="col-2 box">
+						<div class="row">
+							<div class="col-12">
+								<h5><%=fav.city%></h5>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<h5><%=temperatures[index]%>ºC</h5>
+							</div>
+						</div>
+					</div>
+					<%}); %>
+				</div>
+
+			</div>
+			
+		</div>
+
+
+		<Script>
+		/* function */
+		function copyCity(){
+			let cityName = document.getElementsByName("cityName")[0].value;
+			document.getElementsByName("hiddenInput")[0].value = cityName;
+			document.getElementsByName("myForm").action = "/" + cityName;
+		}
+		</Script>
+	
+
+<% include partials/footer %>
