@@ -1,7 +1,5 @@
 <% include partials/header %>
 
-
-
 		<div class="container">
 			<div class="forcast">
 
@@ -15,7 +13,7 @@
 				</div>
 
 				<div class="row weather justify-content-center">
-					<% favorites.forEach(fav,index) {%>
+					<% favorites.forEach(function(fav,index){ %>
 					<div class="col-2 box">
 						<div class="row">
 							<div class="col-12">
